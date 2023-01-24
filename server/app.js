@@ -9,9 +9,8 @@ const cors = require('cors');
 
 app.use(cors());
 
-app.get('/', async (req, res) => {
-    const { rows } = await db.query('SELECT * FROM users');
-    res.send(rows);
+app.get('/test', async (req, res) => {
+    res.status(200).send('test')
 });
 
 app.listen(port, () => {
