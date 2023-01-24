@@ -5,7 +5,7 @@ const port = process.env.PORT;
 const path = require('path');
 const db = require('./models/db')
 
-app.use(express.static('public'));
+//app.use(express.static('public'));
 const cors = require('cors');
 
 app.use(cors());
@@ -14,6 +14,7 @@ app.get('/test', async (req, res) => {
     res.status(200).send('test')
 });
 
+/**
 //general path for getting static pages
 app.get("/*", cors({ credentials: true, origin: 'http://localhost:3000' }), (req, res) => {
     if(process.env.NODE_ENV === 'production') {
@@ -27,6 +28,14 @@ app.get("/*", cors({ credentials: true, origin: 'http://localhost:3000' }), (req
         res.redirect('https://localhost:3000/');
     }
 })
+ */
+
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('build'));
+    app.get('*', (req, res) => {
+      res.sendFile(path.join('build', 'index.html'));
+    });
+  }
 
 app.listen(port, () => {
     console.log(`Example app listening at ${port}`);
