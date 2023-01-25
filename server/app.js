@@ -15,8 +15,9 @@ require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 const port = process.env.PORT;
 const store = require('./store');
 
-//app.use(express.static('public'));
 const cors = require('cors');
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
 app.use(express.static('../client/build'));
 
 app.use(session({
