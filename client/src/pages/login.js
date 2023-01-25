@@ -16,7 +16,6 @@ function Login() {
         const email = e.target.email.value;
         const password = e.target.password.value;
         const user = await dispatch(login({ email, password }))
-        console.log(user)
     }
 
     return (

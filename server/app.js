@@ -4,6 +4,9 @@ const app = express();
 const path = require('path');
 const db = require('./models/db')
 const authRouter = require('./routes/auth');
+const foldersRouter = require('./routes/folders');
+const promptsRouter = require('./routes/prompts');
+const businessesRouter = require('./routes/businesses');
 const passport = require('passport');
 const session = require('express-session');
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
@@ -38,6 +41,9 @@ app.get('/test', async (req, res) => {
 });
 
 app.use('/auth', cors({ credentials: true, origin: 'http://localhost:3000' }), express.json(), authRouter);
+app.use('/folders', cors({ credentials: true, origin: 'http://localhost:3000' }), express.json(), foldersRouter);
+app.use('/prompts', cors({ credentials: true, origin: 'http://localhost:3000' }), express.json(), promptsRouter);
+app.use('/businesses', cors({ credentials: true, origin: 'http://localhost:3000' }), express.json(), businessesRouter);
 
 //general path for getting static pages
 app.get("/*", (req, res) => {
