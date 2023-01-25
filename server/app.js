@@ -1,18 +1,43 @@
-require('dotenv').config();
+//require('dotenv').config();
 const express = require('express');
 const app = express();
-const port = process.env.PORT;
 const path = require('path');
 const db = require('./models/db')
+const authRouter = require('./routes/auth');
+const passport = require('passport');
+const session = require('express-session');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
+const port = process.env.PORT;
+const store = require('./store');
 
 //app.use(express.static('public'));
 const cors = require('cors');
+app.use(express.static('../client/build'));
 
-app.use(cors());
+app.use(session({
+    store: store,
+    secret: process.env.SESSIONSECRET,
+    cookie: {
+        maxAge: 172000000,
+        httpOnly: process.env.NODE_ENV === 'production' ? true : false,
+        sameSite: 'lax'
+    },
+    saveUninitialized: true,
+    resave: false,
+    sameSite: 'none',
+    secure: process.env.NODE_ENV === 'production' ? true : false
+}))
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+require('./controllers/auth');
 
 app.get('/test', async (req, res) => {
     res.status(200).send('test')
 });
+
+app.use('/auth', cors({ credentials: true, origin: 'http://localhost:3000' }), express.json(), authRouter);
 
 //general path for getting static pages
 app.get("/*", (req, res) => {
