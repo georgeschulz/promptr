@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/login';
 import RestrictedRoutes from './components/routeProtection/restrictedRoutes';
 import PrivateRoutes from './components/routeProtection/privateRoutes';
+import Folder from './pages/folders';
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
             <Route path="/login" element={<Login />} />
           </Route>
           <Route element={<PrivateRoutes />}>
-            <Route path="/folders" element={<h1>Folders</h1>} />
+            <Route path="/folders" element={<Folder />} />
           </Route>
         </Routes>
       </Router>
