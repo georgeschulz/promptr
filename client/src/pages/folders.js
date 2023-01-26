@@ -3,10 +3,7 @@ import FolderIcon from "../components/fileSystem/folderIcon";
 import { useEffect } from "react";
 import { getFolders, newFolder, selectFolders, selectIsNewFolderModalOpen, selectNewFolderName, setIsNewFolderModalOpen, setNewFolderName } from "../redux/foldersSlice";
 import { useDispatch, useSelector } from "react-redux";
-import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
-import Box from '@mui/material/Box';
-import { Button, Modal, TextField, withStyles } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import FloatingAddButton from "../components/buttons/FloatingAddButton";
 import ModalWindow from "../components/layout/modal";
 
