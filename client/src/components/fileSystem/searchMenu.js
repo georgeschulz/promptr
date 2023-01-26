@@ -13,11 +13,11 @@ import { useDispatch } from 'react-redux';
 function SearchMenu({ search, setSearch, data, setSelectedItem, headerPropertyName, descriptionPropertyName, idPropertyName, deleteItem }) {
     const dispatch = useDispatch()
     return (
-        <div className='border border-light border-t-0 max-w-md flex flex-wrap justify-center'>
+        <div className='border border-light border-t-0 max-w-md flex flex-wrap justify-center flex-row' style={{ }}>
             <div className='w-full'>
-                <TextField label="Search Term" value={search} onChange={setSearch} style={{ width: "100%", marginBottom: "1rem" }} />
+                <TextField label="Search Term" value={search} onChange={setSearch} style={{ width: "100%", marginBottom: "1rem", alignItems: 'flex-start !important' }} />
             </div>
-            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+            <List sx={{ width: '350px', bgcolor: 'background.paper', maxHeight: "90%" }}>
                 {data.length > 0 && 
                     data.filter(item => item[headerPropertyName].toLowerCase().includes(search.toLowerCase()))
                          .map((item) => (

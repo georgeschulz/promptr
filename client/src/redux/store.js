@@ -3,6 +3,7 @@ import userSlice from './userSlice';
 import navSlice from './navSlice';
 import foldersSlice from './foldersSlice';
 import businessesSlice from './businessesSlice';
+import offerSlice from './offerSlice';
 
 export const store = configureStore({
     reducer: {
@@ -10,5 +11,6 @@ export const store = configureStore({
         nav: navSlice,
         folders: foldersSlice,
         businesses: businessesSlice,
+        offers: offerSlice,
     }
 });

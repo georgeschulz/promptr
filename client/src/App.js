@@ -5,6 +5,7 @@ import RestrictedRoutes from './components/routeProtection/restrictedRoutes';
 import PrivateRoutes from './components/routeProtection/privateRoutes';
 import Folder from './pages/folders';
 import Businesses from './pages/businesses';
+import Offers from './pages/offers';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route element={<PrivateRoutes />}>
             <Route path="/folders" element={<Folder />} />
             <Route path="/businesses" element={<Businesses />} />
+            <Route path="/offers" element={<Offers />} />
           </Route>
         </Routes>
       </Router>
