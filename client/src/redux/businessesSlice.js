@@ -9,6 +9,7 @@ const businessesSlice = createSlice({
         newBusinessDescription: "",
         searchTerm: "",
         selectedBusinessId: null,
+        audiences: []
     },
     reducers: {
         setBusinesses: (state, action) => {
@@ -25,6 +26,12 @@ const businessesSlice = createSlice({
         },
         setSelectedBusinessId: (state, action) => {
             state.selectedBusinessId = action.payload;
+        },
+        setAudiences: (state, action) => {
+            state.audiences = action.payload;
+        },
+        addAudience: (state, action) => {
+            state.audiences.push(action.payload);
         }
     },
 });
@@ -43,6 +50,7 @@ export const getBusinesses = createAsyncThunk(
                 }
             });
             thunkAPI.dispatch(setBusinesses(businessesMapped));
+            thunkAPI.dispatch(setAudiences(businessesMapped.map(business => business.audiences)))
             return response.data;
         } catch (err) {
             return thunkAPI.rejectWithValue(err.response.data);
@@ -98,11 +106,12 @@ export const updateBusiness = createAsyncThunk(
     }
 );
 
-export const { setBusinesses, setNewBusinessName, setNewBusinessDescription, setSearchTerm, setSelectedBusinessId } = businessesSlice.actions;
+export const { setBusinesses, setNewBusinessName, setNewBusinessDescription, setSearchTerm, setSelectedBusinessId, setAudiences, addAudience } = businessesSlice.actions;
 export const selectBusinesses = (state) => state.businesses.businesses;
 export const selectNewBusinessName = (state) => state.businesses.newBusinessName;
 export const selectNewBusinessDescription = (state) => state.businesses.newBusinessDescription;
 export const selectSearchTerm = (state) => state.businesses.searchTerm;
 export const selectSelectedBusinessId = (state) => state.businesses.selectedBusinessId;
 export const selectSelectedBusiness = (state) => state.businesses.businesses ? state.businesses.businesses.find(business => business.business_id === state.businesses.selectedBusinessId) : null;
+export const selectAudiences = (state) => state.businesses.audiences;
 export default businessesSlice.reducer;

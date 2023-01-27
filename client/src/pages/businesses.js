@@ -1,7 +1,7 @@
 import AppLayout from "../components/layout/AppLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getBusinesses, selectBusinesses, setSearchTerm, selectSearchTerm, setSelectedBusinessId, selectSelectedBusiness, newBusiness, removeBusiness, setNewBusinessName, setNewBusinessDescription, selectNewBusinessName, selectNewBusinessDescription, updateBusiness } from "../redux/businessesSlice";
+import { getBusinesses, selectBusinesses, setSearchTerm, selectSearchTerm, setSelectedBusinessId, selectSelectedBusiness, newBusiness, removeBusiness, setNewBusinessName, setNewBusinessDescription, selectNewBusinessName, selectNewBusinessDescription, updateBusiness, selectAudiences } from "../redux/businessesSlice";
 import SearchMenu from "../components/fileSystem/searchMenu";
 import FloatingAddButton from "../components/buttons/FloatingAddButton";
 import { TextField, Button } from "@mui/material";
@@ -12,6 +12,7 @@ function Businesses() {
     const selectedBusiness = useSelector(selectSelectedBusiness)
     const newBusinessName = useSelector(selectNewBusinessName)
     const newBusinessDescription = useSelector(selectNewBusinessDescription)
+    const audiences = useSelector(selectAudiences)
 
     useEffect(() => {
         dispatch(getBusinesses());
@@ -61,6 +62,13 @@ function Businesses() {
                             multiline={true}
                             rows={4}
                         />
+                        <p>Audiene List</p>
+                        <ul>
+                            {audiences.map(audience => {
+                                return <li>{audience.name}</li>
+                            })
+                            }
+                        </ul>
                         <Button variant="contained" onClick={handleSubmit}>Save</Button>
                     </div>
                 }

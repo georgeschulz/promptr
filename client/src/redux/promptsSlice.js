@@ -5,12 +5,22 @@ const promptSlice = createSlice({
     name: 'prompts',
     initialState: {
         prompts: [],
-        prompt: {},
+        prompt: "",
         context: "",
         audience: "",
         additionalDetails: "",
         quality: false,
-        length: ""
+        length: "",
+        currentTemplateId: "",
+        currentBusinessDescription: "",
+        currentOfferDescription: "",
+        currentOfferId: "",
+        currentOfferPainPoints: "",
+        currentOfferBenefits: "",
+        currentOfferFeatures: "",
+        currentBusiness: "",
+        currentBusinessId: "",
+        audienceOptions: []
     },
     reducers: {
         setContext: (state, action) => {
@@ -40,11 +50,43 @@ const promptSlice = createSlice({
             state.additionalDetails = "";
             state.quality = false;
             state.length = "";
+        },
+        setCurrentTemplateId: (state, action) => {
+            state.currentTemplateId = action.payload;
+        },
+        setCurrentOfferDescription: (state, action) => {
+            state.currentOfferDescription = action.payload;
+        },
+        setCurrentOfferId: (state, action) => {
+            state.currentOfferId = action.payload;
+        },
+        setCurrentOfferPainPoints: (state, action) => {
+            state.currentOfferPainPoints = action.payload;
+        },
+        setCurrentOfferBenefits: (state, action) => {
+            state.currentOfferBenefits = action.payload;
+        },
+        setCurrentOfferFeatures: (state, action) => {
+            state.currentOfferFeatures = action.payload;
+        },
+        setCurrentBusiness: (state, action) => {
+            state.currentBusiness = action.payload;
+        },
+        setCurrentBusinessId: (state, action) => {
+            state.currentBusinessId = action.payload;
+        },
+        setBusinessDescription: (state, action) => {
+            state.currentBusinessDescription = action.payload;
+        },
+        setAudienceOptions: (state, action) => {
+            state.audienceOptions = action.payload.map(audience => { 
+                return { title: audience.name }
+             });
         }
     }
 });
 
-export const { setContext, setAudience, setAdditionalDetails, setQuality, setLength, setPrompt, setPrompts, clearPrompt } = promptSlice.actions;
+export const { setContext, setAudience, setAdditionalDetails, setQuality, setLength, setPrompt, setPrompts, clearPrompt, setCurrentBusiness, setCurrentBusinessId, setCurrentOfferBenefits, setCurrentOfferDescription, setCurrentOfferFeatures, setCurrentOfferId, setCurrentOfferPainPoints, setCurrentTemplateId, setBusinessDescription, setAudienceOptions } = promptSlice.actions;
 export const selectContext = (state) => state.prompts.context;
 export const selectAudience = (state) => state.prompts.audience;
 export const selectAdditionalDetails = (state) => state.prompts.additionalDetails;
@@ -52,6 +94,16 @@ export const selectQuality = (state) => state.prompts.quality;
 export const selectLength = (state) => state.prompts.length;
 export const selectPrompt = (state) => state.prompts.prompt;
 export const selectPrompts = (state) => state.prompts.prompts;
+export const selectCurrentTemplateId = (state) => state.prompts.currentTemplateId;
+export const selectOfferDescription = (state) => state.prompts.currentOfferDescription;
+export const selectCurrentOfferId = (state) => state.prompts.currentOfferId;
+export const selectOfferPainPoints = (state) => state.prompts.currentOfferPainPoints;
+export const selectOfferBenefits = (state) => state.prompts.currentOfferBenefits;
+export const selectOfferFeatures = (state) => state.prompts.currentOfferFeatures;
+export const selectCurrentBusiness = (state) => state.prompts.currentBusiness;
+export const selectCurrentBusinessId = (state) => state.prompts.currentBusinessId;
+export const selectBusinessDescription = (state) => state.prompts.currentBusinessDescription;
+export const selectAudienceOptions = (state) => state.prompts.audienceOptions;
 
 export const fetchPromptsThunk = createAsyncThunk(
     'prompts/fetchPrompts',

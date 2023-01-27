@@ -9,6 +9,7 @@ import Offers from './pages/offers';
 import Templates from './pages/templates';
 import PromptList from './pages/promptList';
 import Prompt from './pages/prompt';
+import Home from './pages/home';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Router>
         <Routes>
           <Route element={<RestrictedRoutes />}>
+            <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
           </Route>
           <Route element={<PrivateRoutes />}>
