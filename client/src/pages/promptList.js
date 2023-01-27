@@ -13,6 +13,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Avatar } from "@mui/material";
 import Alert from '@mui/material/Alert';
 import FloatingAddButton from "../components/buttons/FloatingAddButton";
+import { deleteFolderThunk, selectFolders } from "../redux/foldersSlice";
+import { Button } from "@mui/material";
 
 function PromptList() {
     const dispatch = useDispatch();
@@ -20,6 +22,8 @@ function PromptList() {
     const { id } = useParams();
     const prompts = useSelector(selectPrompts);
     const promptList = prompts.filter(prompt => prompt.folder_id === Number(id));
+    const folders = useSelector(selectFolders);
+    const folder = folders.find(folder => folder.folder_id === Number(id));
 
     useEffect(() => {
         dispatch(fetchPromptsThunk());
@@ -29,9 +33,20 @@ function PromptList() {
         navigate(`/prompts/${promptId}`);
     }
 
+    const handleDeleteFolder = () => {
+        dispatch(deleteFolderThunk({id}));
+        navigate("/folders");
+    }
+
     return (
         <AppLayout>
             <div className="px-16 py-10">
+                <div className="flex justify-between" style={{ alignItems: 'flex-start'}}>
+                    <h1 className="text-2xl font-bold mb-8 align-top">{folder.name}</h1>
+                    { folder.name !== "Drafts" &&
+                        <Button variant="contained" onClick={() => handleDeleteFolder()}>Delete Folder</Button>
+                    }
+                </div>
                 <List sx={{ width: '100%', bgcolor: 'background.paper', maxHeight: "90%" }}>
                     {promptList && promptList.map(prompt => {
                         return (

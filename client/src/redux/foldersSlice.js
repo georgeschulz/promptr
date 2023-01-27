@@ -49,6 +49,20 @@ export const newFolder = createAsyncThunk(
     }
 );
 
+export const deleteFolderThunk = createAsyncThunk(
+    "folders/deleteFolder",
+    async (payload, thunkAPI) => {
+        try {
+            const response = await deleteFolder(payload.id);
+            const folders = thunkAPI.getState().folders.folders.filter(folder => folder._id !== payload.id);
+            thunkAPI.dispatch(setFolders(folders));
+            return response.data;
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err.response.data);
+        }
+    }
+);
+
 export const { setFolders, setIsNewFolderModalOpen, setNewFolderName } = foldersSlice.actions;
 export const selectFolders = (state) => state.folders.folders;
 export const selectIsNewFolderModalOpen = (state) => state.folders.isNewFolderModalOpen;
