@@ -65,7 +65,7 @@ function PromptList() {
                                         <Avatar />
                                     </ListItemAvatar>
                                     <ListItemText
-                                        primary={prompt.prompt || "Untitled Prompt"}
+                                        primary={prompt.prompt_name || "Untitled Prompt"}
                                         secondary={prompt.description}
                                     />
                                 </ListItemButton>

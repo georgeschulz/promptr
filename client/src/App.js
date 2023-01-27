@@ -8,6 +8,7 @@ import Businesses from './pages/businesses';
 import Offers from './pages/offers';
 import Templates from './pages/templates';
 import PromptList from './pages/promptList';
+import Prompt from './pages/prompt';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/offers" element={<Offers />} />
             <Route path="/templates" element={<Templates />} />
             <Route path="/folders/:id" element={<PromptList />} />
+            <Route path="/prompts/:id" element={<Prompt />} />
           </Route>
         </Routes>
       </Router>

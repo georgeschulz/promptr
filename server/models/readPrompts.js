@@ -5,6 +5,7 @@ module.exports = readPrompts = async (userId) => {
     SELECT 
         folders.folder_id,
         folders.name,
+        prompts.prompt_name,
         prompts.prompt_id,
         prompts.context,
         prompts.additional_details,
