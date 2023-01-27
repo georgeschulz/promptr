@@ -76,7 +76,8 @@ const deletePromptController = async (req, res) => {
 const createPromptController = async (req, res) => {
     try {
         const userId = req.user.user_id;
-        const prompt = await createPrompt(userId);
+        const folderId = req.body.folderId;
+        const prompt = await createPrompt(userId, Number(folderId));
         res.status(200).json({
             data: prompt,
             message: 'Prompt created successfully'

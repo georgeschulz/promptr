@@ -2,6 +2,7 @@ const readTemplates = require('../models/readTemplates');
 const readTemplateById = require('../models/readTemplateById');
 const createTemplate = require('../models/createTemplate');
 const updateTemplate = require('../models/updateTemplate');
+const deleteTemplate = require('../models/deleteTemplate')
 
 const getTemplatesController = async (req, res) => {
     try {
@@ -68,9 +69,26 @@ const updateTemplateController = async (req, res) => {
     }
 }
 
+const deleteTemplateController = async (req, res) => {
+    try {
+        const templateId = req.params.id;
+        const template = await deleteTemplate(templateId);
+        res.status(200).json({
+            data: template,
+            message: 'Template deleted successfully'
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: 'Error deleting template',
+            data: null
+        });
+    }
+}
+
 module.exports = {
     getTemplatesController,
     getTemplateController,
     createTemplateController,
-    updateTemplateController
+    updateTemplateController,
+    deleteTemplateController
 }

@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux';
 
 function SearchMenu({ search, setSearch, data, setSelectedItem, headerPropertyName, descriptionPropertyName, idPropertyName, deleteItem }) {
     const dispatch = useDispatch()
+
     return (
         <div className='border border-light border-t-0 max-w-md flex flex-wrap justify-center flex-row' style={{ }}>
             <div className='w-full'>
@@ -39,7 +40,7 @@ function SearchMenu({ search, setSearch, data, setSelectedItem, headerPropertyNa
                                     </ListItemAvatar>
                                     <ListItemText
                                         primary={item[headerPropertyName]}
-                                        secondary={item[descriptionPropertyName]}
+                                        secondary={item[descriptionPropertyName].length > 70 ? item[descriptionPropertyName].slice(0, 62) + "..." : item[descriptionPropertyName]}
                                     />
                                 </ListItemButton>
                             </ListItem>

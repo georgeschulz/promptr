@@ -6,6 +6,8 @@ import PrivateRoutes from './components/routeProtection/privateRoutes';
 import Folder from './pages/folders';
 import Businesses from './pages/businesses';
 import Offers from './pages/offers';
+import Templates from './pages/templates';
+import PromptList from './pages/promptList';
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
             <Route path="/folders" element={<Folder />} />
             <Route path="/businesses" element={<Businesses />} />
             <Route path="/offers" element={<Offers />} />
+            <Route path="/templates" element={<Templates />} />
+            <Route path="/folders/:id" element={<PromptList />} />
           </Route>
         </Routes>
       </Router>

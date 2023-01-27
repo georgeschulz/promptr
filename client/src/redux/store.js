@@ -4,6 +4,8 @@ import navSlice from './navSlice';
 import foldersSlice from './foldersSlice';
 import businessesSlice from './businessesSlice';
 import offerSlice from './offerSlice';
+import templatesSlice from './templatesSlice';
+import promptsSlice from './promptsSlice';
 
 export const store = configureStore({
     reducer: {
@@ -12,5 +14,7 @@ export const store = configureStore({
         folders: foldersSlice,
         businesses: businessesSlice,
         offers: offerSlice,
+        templates: templatesSlice,
+        prompts: promptsSlice
     }
 });

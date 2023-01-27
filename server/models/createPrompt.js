@@ -1,8 +1,8 @@
 const db = require('./db')
 
-module.exports = createPrompt = async (userId) => {
+module.exports = createPrompt = async (userId, folderId) => {
     //get the Drafts folder
-    const drafts = await db.query(`SELECT * FROM folders WHERE user_id = $1 AND name = 'Drafts'`, [userId]);
+    const drafts = await db.query(`SELECT * FROM folders WHERE user_id = $1 AND folder_id = $2`, [userId, folderId]);
     const draftsId = drafts.rows[0].folder_id;
     console.log(draftsId)
 

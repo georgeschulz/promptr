@@ -5,7 +5,9 @@ function Nav() {
     return (
         <nav className="flex w-full justify-between px-16 py-6">
             <div>
-                <h1 className="text-2xl font-semibold font-poppins">CopyPrompts</h1>
+                <Link to="/folders">
+                    <h1 className="text-2xl font-semibold font-poppins">CopyPrompts</h1>
+                </Link>
             </div>
             <div>
                 <ul className="flex text-lg gap-4">
