@@ -1,7 +1,12 @@
+import { Button } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
+import { useDispatch } from 'react-redux';
 import ClickToCopyButton from '../components/buttons/ClickToCopyButton';
+import { updatePromptThunk } from '../redux/promptsSlice';
 
-function FillTemplate({template, data}) {
+function FillTemplate({template, data, id}) {
+    const dispatch = useDispatch()
+
     if (typeof template !== 'string' || typeof data !== 'object') {
         return template;
     }
@@ -41,8 +46,9 @@ function FillTemplate({template, data}) {
             <div className="mb-4">
                 {filledTemplate}
             </div>
-            <div className="mb-4">
+            <div className="mb-4 gap-x-4 flex">
                 <ClickToCopyButton text={text} />
+                <Button variant="contained" color="primary" onClick={() => dispatch(updatePromptThunk({id, text}))}>Save Updates</Button>
             </div>
         </div>
     );

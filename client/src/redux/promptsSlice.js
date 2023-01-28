@@ -145,8 +145,25 @@ export const deletePromptThunk = createAsyncThunk(
 export const updatePromptThunk = createAsyncThunk(
     'prompts/updatePrompt',
     async (data, thunkAPI) => {
-        const response = await updatePromptApi(data.id, data);
-        thunkAPI.dispatch(setPrompt(response.data));
+        const context = selectContext(thunkAPI.getState());
+        const audience = selectAudience(thunkAPI.getState());
+        const additionalDetails = selectAdditionalDetails(thunkAPI.getState());
+        const quality = selectQuality(thunkAPI.getState());
+        const length = selectLength(thunkAPI.getState());
+        const templateId = selectCurrentTemplateId(thunkAPI.getState());
+        const offerId = selectCurrentOfferId(thunkAPI.getState());
+        const businessId = selectCurrentBusinessId(thunkAPI.getState());
+        const response = await updatePromptApi(data.id, {
+            context: context,
+            additionalDetails: additionalDetails,
+            quality: quality,
+            length: length,
+            prompt: data.text,
+            businessId,
+            offerId,
+            templateId,
+            audience
+        });
         return response.data;
     }
 );

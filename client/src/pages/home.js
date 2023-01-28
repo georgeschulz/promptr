@@ -16,7 +16,7 @@ function Home() {
                     CopyPrompts
                 </Typography>
                 <Typography component="h1" variant="h5" sx={{ marginBottom: '10px' }}>
-                    A place to store your copywriting prompts
+                    Streamline your sales and marketing writing process
                 </Typography>
                 <Container component="main" maxWidth="xs">
                     <Button

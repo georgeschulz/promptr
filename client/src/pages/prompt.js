@@ -69,6 +69,9 @@ function Prompt() {
             dispatch(setContext(prompt.context));
             dispatch(setAudience(prompt.audience));
             dispatch(setLength(prompt.length));
+            dispatch(setCurrentTemplateId(prompt.template_id))
+            dispatch(setCurrentBusinessId(prompt.business_id))
+            dispatch(setCurrentOfferId(prompt.offer_id))
         }
     }, [prompt])
 
@@ -168,7 +171,6 @@ function Prompt() {
                         id="combo-box-demo"
                         freeSolo
                         options={audienceOptions}
-                        getOptionLabel={(option) => option.title}
                         style={{ width: '100%' }}
                         onChange={handleChangeAudience}
                         renderInput={(params) => <TextField {...params} label="Audience" variant="outlined" />}
@@ -200,6 +202,7 @@ function Prompt() {
                     <FillTemplate
                         template={promptText}
                         data={finalPrompt}
+                        id={id}
                     />
                 </div>
             </div>

@@ -11,7 +11,11 @@ module.exports = readPrompts = async (userId) => {
         prompts.additional_details,
         prompts.quality,
         prompts.prompt,
-        prompts.length
+        prompts.length,
+        prompts.template_id,
+        prompts.offer_id,
+        prompts.business_id,
+        prompts.audience
     FROM users
     LEFT JOIN folders
       ON folders.user_id = users.user_id

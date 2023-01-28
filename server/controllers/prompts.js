@@ -44,12 +44,17 @@ const updatePromptController = async (req, res) => {
         const quality = req.body.quality;
         const prompt = req.body.prompt;
         const length = req.body.length;
-        const updatedPrompt = await updatePrompt(promptId, context, additionalDetails, quality, prompt, length);
+        const templateId = req.body.templateId;
+        const offerId = req.body.offerId;
+        const businessId = req.body.businessId;
+        const audience = req.body.audience;
+        const updatedPrompt = await updatePrompt(promptId, context, additionalDetails, quality, prompt, length, templateId, offerId, businessId, audience);
         res.status(200).json({
             data: updatedPrompt,
             message: 'Prompt updated successfully'
         });
     } catch (err) {
+        console.log(err)
         res.status(500).json({
             message: 'Error updating prompt',
             data: null
