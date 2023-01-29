@@ -8,4 +8,5 @@ router.delete('/:id', controllers.deletePromptController);
 router.post('/', controllers.createPromptController);
 router.post('/duplicate/:id', controllers.duplicatePromptController);
 
+
 module.exports = router;

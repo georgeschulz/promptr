@@ -1,5 +1,5 @@
 import AppLayout from "../components/layout/AppLayout";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { createPromptThunk, deletePromptThunk, duplicatePromptThunk, fetchPromptsThunk, selectPrompts } from "../redux/promptsSlice";
@@ -13,9 +13,17 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Avatar } from "@mui/material";
 import Alert from '@mui/material/Alert';
 import FloatingAddButton from "../components/buttons/FloatingAddButton";
-import { deleteFolderThunk, selectFolders } from "../redux/foldersSlice";
+import { deleteFolderThunk, getFolders, selectFolders } from "../redux/foldersSlice";
 import { Button } from "@mui/material";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
+import Tooltip from '@mui/material/Tooltip';
+import { updatePromptFolderThunk } from "../redux/foldersSlice";
+import ModalWindow from "../components/layout/modal";
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
 
 function PromptList() {
     const dispatch = useDispatch();
@@ -25,9 +33,13 @@ function PromptList() {
     const promptList = prompts.filter(prompt => prompt.folder_id === Number(id));
     const folders = useSelector(selectFolders);
     const folder = folders.find(folder => folder.folder_id === Number(id));
+    const [moveModalOpen, setMoveModalOpen] = useState(false);
+    const [newFolder, setNewFolder] = useState("");
+    const [promptId, setPromptId] = useState("");
 
     useEffect(() => {
         dispatch(fetchPromptsThunk());
+        dispatch(getFolders())
     }, [dispatch]);
 
     const handlePromptClick = (promptId) => {
@@ -39,9 +51,20 @@ function PromptList() {
         navigate("/folders");
     }
 
+    const handleFolderMove = (promptId) => {
+        setPromptId(promptId);
+        setMoveModalOpen(true);
+    }
+
+    const handleFolderSubmit = () => {
+        dispatch(updatePromptFolderThunk({ id: promptId, folderId: newFolder }))
+        setMoveModalOpen(false);
+        dispatch(fetchPromptsThunk());
+    }
+
     return (
         <AppLayout>
-            <div className="px-16 py-10">
+            {(prompts && folder) && (<div className="px-16 py-10">
                 <div className="flex justify-between" style={{ alignItems: 'flex-start' }}>
                     <h1 className="text-2xl font-bold mb-8 align-top">{folder.name}</h1>
                     {folder.name !== "Drafts" &&
@@ -55,12 +78,21 @@ function PromptList() {
                                 key={prompt.prompt_id}
                                 secondaryAction={
                                     <div>
-                                        <IconButton onClick={() => dispatch(duplicatePromptThunk(prompt.prompt_id))}>
-                                            <ContentCopyIcon />
-                                        </IconButton>
-                                        <IconButton edge="end" aria-label="delete" onClick={() => dispatch(deletePromptThunk(prompt.prompt_id))}>
-                                            <DeleteIcon />
-                                        </IconButton>
+                                        <Tooltip title="Move Prompt">
+                                            <IconButton onClick={() => handleFolderMove(prompt.prompt_id)}>
+                                                <DriveFileMoveIcon />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip title="Duplicate Prompt">
+                                            <IconButton onClick={() => dispatch(duplicatePromptThunk(prompt.prompt_id))}>
+                                                <ContentCopyIcon />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip title="Delete Prompt">
+                                            <IconButton edge="end" aria-label="delete" onClick={() => dispatch(deletePromptThunk(prompt.prompt_id))}>
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </Tooltip>
                                     </div>
                                 }
                                 disablePadding
@@ -86,7 +118,32 @@ function PromptList() {
                     }
                 </List>
                 <FloatingAddButton onClick={() => dispatch(createPromptThunk({ folderId: id }))} />
-            </div>
+                <ModalWindow 
+                    handleOpen={() => setMoveModalOpen(true)} 
+                    handleClose={() => setMoveModalOpen(false)} 
+                    isOpen={moveModalOpen}
+                    header="Move Prompt"
+                >
+                    <FormControl sx={{width: '100%', marginBottom: '10px' }}>
+                        <InputLabel id="demo-simple-select-label">Folder</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={newFolder}
+                            label="Folder"
+                            onChange={(e) => setNewFolder(e.target.value)}
+                            sx={{ width: "100%" }}
+                        >
+                            {folders.map(folder => {
+                                return (
+                                    <MenuItem value={folder.folder_id}>{folder.name}</MenuItem>
+                                )}
+                            )}   
+                        </Select>
+                    </FormControl>
+                    <Button variant="contained" onClick={handleFolderSubmit}>Move</Button>
+                </ModalWindow>
+            </div>)}
         </AppLayout>
     )
 }

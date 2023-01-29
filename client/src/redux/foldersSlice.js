@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchFolders, deleteFolder, fetchFolderById, createFolder } from "../api/folders";
+import { fetchFolders, deleteFolder, fetchFolderById, createFolder, updatePromptFolder } from "../api/folders";
 
 const foldersSlice = createSlice({
     name: "folders",
@@ -56,6 +56,18 @@ export const deleteFolderThunk = createAsyncThunk(
             const response = await deleteFolder(payload.id);
             const folders = thunkAPI.getState().folders.folders.filter(folder => folder._id !== payload.id);
             thunkAPI.dispatch(setFolders(folders));
+            return response.data;
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err.response.data);
+        }
+    }
+);
+
+export const updatePromptFolderThunk = createAsyncThunk(
+    "folders/updatePromptFolder",
+    async (payload, thunkAPI) => {
+        try {
+            const response = await updatePromptFolder(payload.id, payload.folderId);
             return response.data;
         } catch (err) {
             return thunkAPI.rejectWithValue(err.response.data);

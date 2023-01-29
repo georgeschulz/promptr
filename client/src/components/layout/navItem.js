@@ -1,6 +1,6 @@
 function NavItem({ isSelected = false, children }) {
     return (
-        <li className="hover:underline cursor-pointer">{children}</li>
+        <li className="hover:underline cursor-pointer pt-1">{children}</li>
     )
 }
 

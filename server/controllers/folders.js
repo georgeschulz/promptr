@@ -2,6 +2,7 @@ const readFolders = require('../models/readFolders');
 const readFolderById = require('../models/readFolderById');
 const createFolder = require('../models/createFolder');
 const deleteFolder = require('../models/deleteFolder');
+const updatePromptFolder = require('../models/updatePromptFolder');
 
 const getFoldersController = async (req, res) => {
     try {
@@ -68,10 +69,28 @@ const deleteFolderController = async (req, res) => {
     }
 }
 
+const updatePromptFolderController = async (req, res) => {
+    try {
+        const promptId = req.params.id;
+        const folderId = req.body.folderId;
+        console.table({folderId, promptId})
+        const updatedPrompt = await updatePromptFolder(folderId, promptId);
+        res.status(200).json({
+            data: updatedPrompt,
+            message: 'Prompt updated successfully'
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: 'Error updating prompt',
+            data: null
+        });
+    }
+}
 
 module.exports = {
     getFoldersController,
     getFolderController,
     createFolderController,
-    deleteFolderController
+    deleteFolderController,
+    updatePromptFolderController
 }

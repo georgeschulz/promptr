@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 import NavItem from "./navItem";
+import SettingsIcon from '@mui/icons-material/Settings';
+import { IconButton } from "@mui/material";
+import AccountMenu from "./AccountMenu";
 
 function Nav() {
     return (
@@ -15,7 +18,7 @@ function Nav() {
                     <NavItem><Link to="/offers">Offers</Link></NavItem>
                     <NavItem><Link to="/businesses">Businesses</Link></NavItem>
                     <NavItem><Link to="/templates">Templates</Link></NavItem>
-                    <NavItem>Settings</NavItem>
+                    <AccountMenu />
                 </ul>
             </div>
         </nav>

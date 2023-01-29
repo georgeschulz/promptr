@@ -17,3 +17,7 @@ export const createFolder = async (name) => {
 export const deleteFolder = async (id) => {
     return await axios.delete(`${endpoint}/folders/${id}`);
 }
+
+export const updatePromptFolder = async (id, folderId) => {
+    return await axios.put(`${endpoint}/folders/location/${id}`, { folderId });
+}
