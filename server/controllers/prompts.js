@@ -3,6 +3,7 @@ const readPromptById = require('../models/readPromptById');
 const updatePrompt = require('../models/updatePrompt');
 const deletePrompt = require('../models/deletePrompt');
 const createPrompt = require('../models/createPrompt');
+const duplicatePrompt = require('../models/duplicatePrompt');
 
 const getPromptsController = async (req, res) => {
     try {
@@ -48,7 +49,8 @@ const updatePromptController = async (req, res) => {
         const offerId = req.body.offerId;
         const businessId = req.body.businessId;
         const audience = req.body.audience;
-        const updatedPrompt = await updatePrompt(promptId, context, additionalDetails, quality, prompt, length, templateId, offerId, businessId, audience);
+        const promptName = req.body.promptName;
+        const updatedPrompt = await updatePrompt(promptId, context, additionalDetails, quality, prompt, length, templateId, offerId, businessId, audience, promptName);
         res.status(200).json({
             data: updatedPrompt,
             message: 'Prompt updated successfully'
@@ -95,10 +97,27 @@ const createPromptController = async (req, res) => {
     }
 }
 
+const duplicatePromptController = async (req, res) => {
+    try {
+        const promptId = req.params.id;
+        const prompt = await duplicatePrompt(promptId);
+        res.status(200).json({
+            data: prompt,
+            message: 'Prompt duplicated successfully'
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: 'Error duplicating prompt',
+            data: null
+        });
+    }
+}
+
 module.exports = {
     getPromptsController,
     getPromptController,
     updatePromptController,
     deletePromptController,
-    createPromptController
+    createPromptController,
+    duplicatePromptController
 }

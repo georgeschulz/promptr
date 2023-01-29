@@ -2,7 +2,7 @@ import AppLayout from "../components/layout/AppLayout";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { createPromptThunk, deletePromptThunk, fetchPromptsThunk, selectPrompts } from "../redux/promptsSlice";
+import { createPromptThunk, deletePromptThunk, duplicatePromptThunk, fetchPromptsThunk, selectPrompts } from "../redux/promptsSlice";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -15,6 +15,7 @@ import Alert from '@mui/material/Alert';
 import FloatingAddButton from "../components/buttons/FloatingAddButton";
 import { deleteFolderThunk, selectFolders } from "../redux/foldersSlice";
 import { Button } from "@mui/material";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 function PromptList() {
     const dispatch = useDispatch();
@@ -34,16 +35,16 @@ function PromptList() {
     }
 
     const handleDeleteFolder = () => {
-        dispatch(deleteFolderThunk({id}));
+        dispatch(deleteFolderThunk({ id }));
         navigate("/folders");
     }
 
     return (
         <AppLayout>
             <div className="px-16 py-10">
-                <div className="flex justify-between" style={{ alignItems: 'flex-start'}}>
+                <div className="flex justify-between" style={{ alignItems: 'flex-start' }}>
                     <h1 className="text-2xl font-bold mb-8 align-top">{folder.name}</h1>
-                    { folder.name !== "Drafts" &&
+                    {folder.name !== "Drafts" &&
                         <Button variant="contained" onClick={() => handleDeleteFolder()}>Delete Folder</Button>
                     }
                 </div>
@@ -53,9 +54,14 @@ function PromptList() {
                             <ListItem
                                 key={prompt.prompt_id}
                                 secondaryAction={
-                                    <IconButton edge="end" aria-label="delete" onClick={() => dispatch(deletePromptThunk(prompt.prompt_id))}>
-                                        <DeleteIcon />
-                                    </IconButton>
+                                    <div>
+                                        <IconButton onClick={() => dispatch(duplicatePromptThunk(prompt.prompt_id))}>
+                                            <ContentCopyIcon />
+                                        </IconButton>
+                                        <IconButton edge="end" aria-label="delete" onClick={() => dispatch(deletePromptThunk(prompt.prompt_id))}>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </div>
                                 }
                                 disablePadding
                                 sx={{ cursor: "pointer", borderBottom: "1px solid #e0e0e0", borderTop: "1px solid #e0e0e0" }}
@@ -71,15 +77,15 @@ function PromptList() {
                                 </ListItemButton>
                             </ListItem>
 
-                                    
+
                         )
                     }
                     )}
-                    { promptList.length === 0 &&
+                    {promptList.length === 0 &&
                         <Alert severity="error">There's nothing here :( Please make your first prompt for this folder.</Alert>
                     }
                 </List>
-                <FloatingAddButton onClick={() => dispatch(createPromptThunk({folderId: id}))} />
+                <FloatingAddButton onClick={() => dispatch(createPromptThunk({ folderId: id }))} />
             </div>
         </AppLayout>
     )

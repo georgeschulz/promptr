@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchPrompts, fetchPromptById, deletePrompt, updatePromptApi, createPrompt } from "../api/prompts";
+import { fetchPrompts, fetchPromptById, deletePrompt, updatePromptApi, createPrompt, duplicatePromptApi } from "../api/prompts";
 
 const promptSlice = createSlice({
     name: 'prompts',
     initialState: {
         prompts: [],
+        promptName: "",
         prompt: "",
         context: "",
         audience: "",
@@ -82,11 +83,14 @@ const promptSlice = createSlice({
             state.audienceOptions = action.payload.map(audience => { 
                 return { title: audience.name }
              });
+        },
+        setPromptName: (state, action) => {
+            state.promptName = action.payload;
         }
     }
 });
 
-export const { setContext, setAudience, setAdditionalDetails, setQuality, setLength, setPrompt, setPrompts, clearPrompt, setCurrentBusiness, setCurrentBusinessId, setCurrentOfferBenefits, setCurrentOfferDescription, setCurrentOfferFeatures, setCurrentOfferId, setCurrentOfferPainPoints, setCurrentTemplateId, setBusinessDescription, setAudienceOptions } = promptSlice.actions;
+export const { setContext, setAudience, setAdditionalDetails, setQuality, setLength, setPrompt, setPrompts, clearPrompt, setCurrentBusiness, setCurrentBusinessId, setCurrentOfferBenefits, setCurrentOfferDescription, setCurrentOfferFeatures, setCurrentOfferId, setCurrentOfferPainPoints, setCurrentTemplateId, setBusinessDescription, setAudienceOptions, setPromptName } = promptSlice.actions;
 export const selectContext = (state) => state.prompts.context;
 export const selectAudience = (state) => state.prompts.audience;
 export const selectAdditionalDetails = (state) => state.prompts.additionalDetails;
@@ -104,6 +108,7 @@ export const selectCurrentBusiness = (state) => state.prompts.currentBusiness;
 export const selectCurrentBusinessId = (state) => state.prompts.currentBusinessId;
 export const selectBusinessDescription = (state) => state.prompts.currentBusinessDescription;
 export const selectAudienceOptions = (state) => state.prompts.audienceOptions;
+export const selectPromptName = (state) => state.prompts.promptName;
 
 export const fetchPromptsThunk = createAsyncThunk(
     'prompts/fetchPrompts',
@@ -142,6 +147,15 @@ export const deletePromptThunk = createAsyncThunk(
     }
 );
 
+export const duplicatePromptThunk = createAsyncThunk(
+    'prompts/duplicatePrompt',
+    async (id, thunkAPI) => {
+        const response = await duplicatePromptApi(id);
+        thunkAPI.dispatch(fetchPromptsThunk());
+        return response.data;
+    }
+);
+
 export const updatePromptThunk = createAsyncThunk(
     'prompts/updatePrompt',
     async (data, thunkAPI) => {
@@ -153,6 +167,7 @@ export const updatePromptThunk = createAsyncThunk(
         const templateId = selectCurrentTemplateId(thunkAPI.getState());
         const offerId = selectCurrentOfferId(thunkAPI.getState());
         const businessId = selectCurrentBusinessId(thunkAPI.getState());
+        const promptName = selectPromptName(thunkAPI.getState());
         const response = await updatePromptApi(data.id, {
             context: context,
             additionalDetails: additionalDetails,
@@ -162,7 +177,8 @@ export const updatePromptThunk = createAsyncThunk(
             businessId,
             offerId,
             templateId,
-            audience
+            audience,
+            promptName
         });
         return response.data;
     }

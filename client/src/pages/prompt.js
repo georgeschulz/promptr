@@ -1,12 +1,10 @@
 import AppLayout from "../components/layout/AppLayout";
-import { Button, TextField } from "@mui/material";
+import { IconButton, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { selectAudienceOptions, selectBusinessDescription, selectCurrentBusinessId, selectCurrentOfferId, selectCurrentTemplateId, selectPrompts, setAudienceOptions, setBusinessDescription } from "../redux/promptsSlice";
-import { useParams, useNavigate, Form } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { duplicatePromptThunk, selectAudienceOptions, selectBusinessDescription, selectCurrentBusinessId, selectCurrentOfferId, selectCurrentTemplateId, selectPromptName, selectPrompts, setAudienceOptions, setBusinessDescription, setPromptName } from "../redux/promptsSlice";
+import { useParams, useNavigate } from "react-router-dom";
 import { fetchPromptsThunk, setAdditionalDetails, setContext, setAudience, setLength, setPrompt, selectAdditionalDetails, selectAudience, selectContext, selectLength, selectPrompt, setCurrentTemplateId, setCurrentBusinessId, selectOfferDescription, selectOfferBenefits, selectOfferPainPoints, selectOfferFeatures, setCurrentOfferId, setCurrentOfferBenefits, setCurrentOfferDescription, setCurrentOfferFeatures, setCurrentOfferPainPoints } from "../redux/promptsSlice";
-import fillTemplate from "../components/fileSystem/fillTemplate";
-import ClickToCopyButton from "../components/buttons/ClickToCopyButton";
 import { getTemplates, selectTemplates } from "../redux/templatesSlice";
 import { getOffers, selectOffers } from "../redux/offerSlice";
 import { getBusinesses } from "../redux/businessesSlice";
@@ -18,6 +16,8 @@ import Select from '@mui/material/Select';
 import { selectBusinesses } from "../redux/businessesSlice";
 import Autocomplete from '@mui/material/Autocomplete';
 import FillTemplate from "../components/fileSystem/fillTemplate";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import EditIcon from '@mui/icons-material/Edit';
 
 function Prompt() {
     const dispatch = useDispatch();
@@ -25,6 +25,8 @@ function Prompt() {
     const { id } = useParams();
     const prompts = useSelector(selectPrompts);
     const prompt = prompts ? prompts.find(prompt => prompt.prompt_id === Number(id)) : "";
+    const promptName = useSelector(selectPromptName)
+    const [edit, setEdit] = useState(false);
     const promptText = useSelector(selectPrompt);
     const additionalDetails = useSelector(selectAdditionalDetails);
     const context = useSelector(selectContext);
@@ -72,8 +74,9 @@ function Prompt() {
             dispatch(setCurrentTemplateId(prompt.template_id))
             dispatch(setCurrentBusinessId(prompt.business_id))
             dispatch(setCurrentOfferId(prompt.offer_id))
+            dispatch(setPromptName(prompt.prompt_name))
         }
-    }, [prompt])
+    }, [prompt, id])
 
     const handleTemplateChange = (e) => {
         dispatch(setCurrentTemplateId(e.target.value))
@@ -101,10 +104,41 @@ function Prompt() {
         dispatch(setAudience(value.title))
     }
 
+    const handleDuplicate = async () => {
+        const data = await dispatch(duplicatePromptThunk(id))
+        const newId = data.payload.data.prompt_id
+        navigate(`/prompts/${newId}`)
+    }
+
+    const handleEdit = () => {
+        setEdit(!edit)
+    }
+
     return (
         <AppLayout>
             <div className="px-16 py-10">
-                <h1 className="text-2xl font-bold mb-8 flex flex-wrap space-y-4">Prompt</h1>
+                <div className="flex justify-between">
+                    <div className="flex mb-8">
+                        {!edit  && <h1 className="text-2xl font-bold flex flex-wrap space-y-4">{promptName}</h1> }
+                        {edit && <TextField
+                            id="outlined-basic"
+                            label="Prompt Name"
+                            variant="outlined"
+                            value={promptName}
+                            onChange={(e) => dispatch(setPromptName(e.target.value))}
+                            sx={{ width: '300px'}}
+                        />}
+                        
+                        <IconButton onClick={handleEdit}>
+                            <EditIcon sx={{ width: '20px'}} />
+                        </IconButton>
+                    </div>
+                    <div>
+                        <IconButton onClick={handleDuplicate}>
+                            <ContentCopyIcon />
+                        </IconButton>
+                    </div>
+                </div>
                 <div className="mb-4">
                     <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Template</InputLabel>

@@ -21,3 +21,7 @@ export const deletePrompt = async (id) => {
 export const updatePromptApi = async (id, updates) => {
     return await axios.put(`${endpoint}/prompts/${id}`, updates);
 }
+
+export const duplicatePromptApi = async (id) => {
+    return await axios.post(`${endpoint}/prompts/duplicate/${id}`);
+}

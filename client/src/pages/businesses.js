@@ -23,7 +23,6 @@ function Businesses() {
     useEffect(() => {
         dispatch(setNewBusinessName(selectedBusiness?.name || ""))
         dispatch(setNewBusinessDescription(selectedBusiness?.description || ""))
-        console.log(audiences)
         const audienceArray = selectedBusiness?.audiences?.map(audience => audience.name) || []
         dispatch(setAudiences(audienceArray || []))
     }, [selectedBusiness])
