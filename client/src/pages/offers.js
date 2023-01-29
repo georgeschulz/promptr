@@ -40,7 +40,7 @@ function Offers() {
                 description: newOfferDescription,
                 pain_points: newOfferPainpoints,
                 benefits: newOfferBenefits,
-                features: newOfferFeatures
+                features: newOfferFeatures,
             }
         }))
     }

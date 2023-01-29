@@ -74,7 +74,8 @@ const updateBusinessController = async (req, res) => {
         const businessId = req.params.id;
         const description = req.body.description;
         const name = req.body.name;
-        const updatedBusiness = await updateBusiness(businessId, name, description);
+        const audiences = req.body.audiences;
+        const updatedBusiness = await updateBusiness(businessId, name, description, audiences);
         res.status(200).json({
             data: updatedBusiness,
             message: 'Business updated successfully'

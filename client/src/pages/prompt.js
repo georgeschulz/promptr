@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { selectAudienceOptions, selectBusinessDescription, selectCurrentBusinessId, selectCurrentOfferId, selectCurrentTemplateId, selectPrompts, setAudienceOptions, setBusinessDescription } from "../redux/promptsSlice";
 import { useParams, useNavigate, Form } from "react-router-dom";
 import { fetchPromptsThunk, setAdditionalDetails, setContext, setAudience, setLength, setPrompt, selectAdditionalDetails, selectAudience, selectContext, selectLength, selectPrompt, setCurrentTemplateId, setCurrentBusinessId, selectOfferDescription, selectOfferBenefits, selectOfferPainPoints, selectOfferFeatures, setCurrentOfferId, setCurrentOfferBenefits, setCurrentOfferDescription, setCurrentOfferFeatures, setCurrentOfferPainPoints } from "../redux/promptsSlice";
-import fillTemplate from "../util/fillTemplate";
+import fillTemplate from "../components/fileSystem/fillTemplate";
 import ClickToCopyButton from "../components/buttons/ClickToCopyButton";
 import { getTemplates, selectTemplates } from "../redux/templatesSlice";
 import { getOffers, selectOffers } from "../redux/offerSlice";
@@ -17,7 +17,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { selectBusinesses } from "../redux/businessesSlice";
 import Autocomplete from '@mui/material/Autocomplete';
-import FillTemplate from "../util/fillTemplate";
+import FillTemplate from "../components/fileSystem/fillTemplate";
 
 function Prompt() {
     const dispatch = useDispatch();
@@ -86,7 +86,6 @@ function Prompt() {
         const business = businesses.find(business => business.business_id === e.target.value)
         dispatch(setBusinessDescription(business.description))
         dispatch(setAudienceOptions(business.audiences))
-
     }
 
     const handleOfferChange = (e) => {
@@ -171,7 +170,8 @@ function Prompt() {
                         id="combo-box-demo"
                         freeSolo
                         options={audienceOptions}
-                        style={{ width: '100%' }}
+                        getOptionLabel={(option) => option.title}
+                        style={{ width: "100%" }}
                         onChange={handleChangeAudience}
                         renderInput={(params) => <TextField {...params} label="Audience" variant="outlined" />}
                     />
@@ -199,11 +199,11 @@ function Prompt() {
                     />
                 </div>
                 <div className="mb-4">
-                    <FillTemplate
+                    {typeof promptText == "string" && (<FillTemplate
                         template={promptText}
                         data={finalPrompt}
                         id={id}
-                    />
+                    />)}
                 </div>
             </div>
         </AppLayout>

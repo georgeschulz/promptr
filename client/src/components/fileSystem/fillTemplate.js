@@ -1,8 +1,8 @@
 import { Button } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 import { useDispatch } from 'react-redux';
-import ClickToCopyButton from '../components/buttons/ClickToCopyButton';
-import { updatePromptThunk } from '../redux/promptsSlice';
+import ClickToCopyButton from '../buttons/ClickToCopyButton';
+import { updatePromptThunk } from '../../redux/promptsSlice';
 
 function FillTemplate({template, data, id}) {
     const dispatch = useDispatch()

@@ -1,10 +1,12 @@
 import AppLayout from "../components/layout/AppLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getBusinesses, selectBusinesses, setSearchTerm, selectSearchTerm, setSelectedBusinessId, selectSelectedBusiness, newBusiness, removeBusiness, setNewBusinessName, setNewBusinessDescription, selectNewBusinessName, selectNewBusinessDescription, updateBusiness, selectAudiences } from "../redux/businessesSlice";
+import { getBusinesses, selectBusinesses, setSearchTerm, selectSearchTerm, setSelectedBusinessId, selectSelectedBusiness, newBusiness, removeBusiness, setNewBusinessName, setNewBusinessDescription, selectNewBusinessName, selectNewBusinessDescription, updateBusiness, selectAudiences, updateAudienceMember, removeAudienceMember, addAudience, setAudiences } from "../redux/businessesSlice";
 import SearchMenu from "../components/fileSystem/searchMenu";
 import FloatingAddButton from "../components/buttons/FloatingAddButton";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, IconButton } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 
 function Businesses() {
     const dispatch = useDispatch();
@@ -21,6 +23,9 @@ function Businesses() {
     useEffect(() => {
         dispatch(setNewBusinessName(selectedBusiness?.name || ""))
         dispatch(setNewBusinessDescription(selectedBusiness?.description || ""))
+        console.log(audiences)
+        const audienceArray = selectedBusiness?.audiences?.map(audience => audience.name) || []
+        dispatch(setAudiences(audienceArray || []))
     }, [selectedBusiness])
 
     const handleSubmit = (e) => {
@@ -28,14 +33,14 @@ function Businesses() {
         if (selectedBusiness) {
             dispatch(updateBusiness({
                 businessId: selectedBusiness.business_id,
-                updates: { name: newBusinessName, description: newBusinessDescription }
+                updates: { name: newBusinessName, description: newBusinessDescription, audiences }
             }));
         }
     }
 
     return (
         <AppLayout>
-            <div className="px-16 py-10 flex">
+            <div className="px-16 py-10 flex" style={{ alignItems: 'flex-start'}}>
                 <SearchMenu
                     data={businesses}
                     setSearch={(e) => dispatch(setSearchTerm(e.target.value))}
@@ -62,13 +67,33 @@ function Businesses() {
                             multiline={true}
                             rows={4}
                         />
-                        <p>Audiene List</p>
-                        <ul>
-                            {audiences.map(audience => {
-                                return <li>{audience.name}</li>
-                            })
-                            }
-                        </ul>
+                        <div className="flex justify-between align-middle mb-2" style={{ width: '400px' }}>
+                            <p className="font-semibold text-lg ">Audience List for Business</p>
+                            <IconButton onClick={() => dispatch(addAudience(""))}>
+                                <AddIcon />
+                            </IconButton>
+                        </div>
+                        <div>
+                            <ul>
+                                {audiences.map((audience, i) => {
+                                    return (<li>
+                                        <TextField
+                                            value={audience}
+                                            onChange={(e) => dispatch(updateAudienceMember({ index: i, newValue: e.target.value }))}
+                                            style={{ width: "75%", marginBottom: "1rem" }}
+                                        />
+                                        <IconButton onClick={() => dispatch(removeAudienceMember({ index: i }))}>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </li>
+                                    )
+                                })
+                                }
+                            </ul>
+
+
+                        </div>
+                        <br />
                         <Button variant="contained" onClick={handleSubmit}>Save</Button>
                     </div>
                 }

@@ -32,6 +32,19 @@ const businessesSlice = createSlice({
         },
         addAudience: (state, action) => {
             state.audiences.push(action.payload);
+        },
+        updateAudienceMember: (state, action) => {
+            const { index, newValue } = action.payload;
+            state.audiences = state.audiences.map((audience, i) => {
+                if (i === index) {
+                    return newValue;
+                }
+                return audience;
+            })
+        },
+        removeAudienceMember: (state, action) => {
+            const { index } = action.payload;
+            state.audiences.splice(index, 1);
         }
     },
 });
@@ -50,7 +63,7 @@ export const getBusinesses = createAsyncThunk(
                 }
             });
             thunkAPI.dispatch(setBusinesses(businessesMapped));
-            thunkAPI.dispatch(setAudiences(businessesMapped.map(business => business.audiences)))
+            thunkAPI.dispatch(setAudiences(businessesMapped.map(business => business.audiences).flat().map(audience => audience.name)))
             return response.data;
         } catch (err) {
             return thunkAPI.rejectWithValue(err.response.data);
@@ -93,7 +106,10 @@ export const updateBusiness = createAsyncThunk(
             const response = await updateBusinessApi(payload.businessId, payload.updates);
             const businesses = thunkAPI.getState().businesses.businesses.map(business => {
                 if (business.business_id === payload.businessId) {
-                    return response.data.data;
+                    return {
+                        ...response.data.data, 
+                        audiences: payload.updates.audiences,
+                    };
                 } else {
                     return business;
                 }
@@ -106,7 +122,7 @@ export const updateBusiness = createAsyncThunk(
     }
 );
 
-export const { setBusinesses, setNewBusinessName, setNewBusinessDescription, setSearchTerm, setSelectedBusinessId, setAudiences, addAudience } = businessesSlice.actions;
+export const { setBusinesses, setNewBusinessName, setNewBusinessDescription, setSearchTerm, setSelectedBusinessId, setAudiences, addAudience, updateAudienceMember, removeAudienceMember } = businessesSlice.actions;
 export const selectBusinesses = (state) => state.businesses.businesses;
 export const selectNewBusinessName = (state) => state.businesses.newBusinessName;
 export const selectNewBusinessDescription = (state) => state.businesses.newBusinessDescription;
