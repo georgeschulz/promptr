@@ -47,7 +47,8 @@ function FillTemplate({template, data, id}) {
                 {filledTemplate}
             </div>
             <div className="mb-4 gap-x-4 flex">
-                <ClickToCopyButton text={text} />
+                <ClickToCopyButton text={text} openChat={false}>Copy to Clipboard</ClickToCopyButton>
+                <ClickToCopyButton text={text} openChat={true}>Start Chat</ClickToCopyButton>
                 <Button variant="contained" color="primary" onClick={() => dispatch(updatePromptThunk({id, text}))}>Save Updates</Button>
             </div>
         </div>

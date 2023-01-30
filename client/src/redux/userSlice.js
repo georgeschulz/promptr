@@ -1,6 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { onLogin, onLogout } from "../api/loginApi";
 
+const userFromLocalStorage = () => {
+    const user = localStorage.getItem('user');
+    return user && JSON.parse(user);
+}
+
+
 export const login = createAsyncThunk(
     "user/login",
     async (payload, thunkAPI) => {
@@ -32,12 +38,23 @@ export const logout = createAsyncThunk(
 const userSlice = createSlice({
     name: "user",
     initialState: {
-        user: null
+        user: userFromLocalStorage() || null
     },
     reducers: {
         setUser: (state, action) => {
             state.user = action.payload;
         }
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(login.fulfilled, (state, action) => {
+                state.user = action.payload.data;
+                localStorage.setItem('user', JSON.stringify(action.payload.data));
+            })
+            .addCase(logout.fulfilled, (state, action) => {
+                localStorage.removeItem('user');
+                state.user = null;
+            })
     }
 });
 
