@@ -51,7 +51,7 @@ function Prompt() {
         details: additionalDetails || "",
         biz: business || "",
         description: offerDescription || "",
-        painPoints: offerPainPoints || "",
+        pain: offerPainPoints || "",
         benefits: offerBenefits || "",
         features: offerFeatures || "",
     }
@@ -145,7 +145,7 @@ function Prompt() {
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            value={templateId}
+                            value={templateId || ""}
                             label="Template"
                             onChange={handleTemplateChange}
                         >
@@ -161,7 +161,7 @@ function Prompt() {
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            value={businessId}
+                            value={businessId || ""}
                             label="Business"
                             onChange={handleBusinessChange}
                         >
@@ -177,7 +177,7 @@ function Prompt() {
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            value={offerId}
+                            value={offerId || ""}
                             label="Offer"
                             onChange={handleOfferChange}
                         >
@@ -192,8 +192,8 @@ function Prompt() {
                         id="outlined-multiline-static"
                         label="Context"
                         multiline
-                        rows={4}
-                        value={context}
+                        rows={3}
+                        value={context || ""}
                         onChange={(e) => dispatch(setContext(e.target.value))}
                         variant="outlined"
                         fullWidth
@@ -214,7 +214,7 @@ function Prompt() {
                     <TextField
                         id="outlined-multiline-static"
                         label="Length"
-                        value={length}
+                        value={length || ""}
                         onChange={(e) => dispatch(setLength(e.target.value))}
                         variant="outlined"
                         fullWidth
@@ -226,7 +226,7 @@ function Prompt() {
                         label="Additional Details"
                         multiline
                         rows={4}
-                        value={additionalDetails}
+                        value={additionalDetails || ""}
                         onChange={(e) => dispatch(setAdditionalDetails(e.target.value))}
                         variant="outlined"
                         fullWidth

@@ -66,7 +66,7 @@ function Businesses() {
                             multiline={true}
                             rows={4}
                         />
-                        <div className="flex justify-between align-middle mb-2" style={{ width: '400px' }}>
+                        <div className="flex justify-between align-middle mb-2" style={{ width: '75%' }}>
                             <p className="font-semibold text-lg ">Audience List for Business</p>
                             <IconButton onClick={() => dispatch(addAudience(""))}>
                                 <AddIcon />
@@ -75,9 +75,9 @@ function Businesses() {
                         <div>
                             <ul>
                                 {audiences.map((audience, i) => {
-                                    return (<li>
+                                    return (<li key={i}>
                                         <TextField
-                                            value={audience}
+                                            value={audience || ""}
                                             onChange={(e) => dispatch(updateAudienceMember({ index: i, newValue: e.target.value }))}
                                             style={{ width: "75%", marginBottom: "1rem" }}
                                         />

@@ -3,6 +3,7 @@ const readFolderById = require('../models/readFolderById');
 const createFolder = require('../models/createFolder');
 const deleteFolder = require('../models/deleteFolder');
 const updatePromptFolder = require('../models/updatePromptFolder');
+const updateFolderName = require('../models/updateFolderName');
 
 const getFoldersController = async (req, res) => {
     try {
@@ -87,10 +88,28 @@ const updatePromptFolderController = async (req, res) => {
     }
 }
 
+const updateFolderNameController = async (req, res) => {
+    try {
+        const folderId = req.params.id;
+        const folderName = req.body.folderName;
+        const updatedFolder = await updateFolderName(folderId, folderName);
+        res.status(200).json({
+            data: updatedFolder,
+            message: 'Folder updated successfully'
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: 'Error updating folder',
+            data: null
+        });
+    }
+}
+
 module.exports = {
     getFoldersController,
     getFolderController,
     createFolderController,
     deleteFolderController,
-    updatePromptFolderController
+    updatePromptFolderController,
+    updateFolderNameController
 }

@@ -22,7 +22,7 @@ function FillTemplate({template, data, id}) {
 
     let text = ""
     //loop through the array
-    const filledTemplate = templateArray.map((string) => {
+    const filledTemplate = templateArray.map((string, i) => {
         //if the string is a variable
         if (string.match(/\{(\w+)\}/g)) {
             //return the value of the variable
@@ -30,14 +30,14 @@ function FillTemplate({template, data, id}) {
             const variableName = string.match(/\{(\w+)\}/g)[0].replace(/\{|\}/g, '');
             text += data[variableName];
             return (
-                <Tooltip title={`{${variableName}}`} key={variableName}>
+                <Tooltip title={`{${variableName}}`} key={variableName + '-' + i}>
                     <span className="text-blue-600 hover:underline cursor-pointer">{data[variableName]}</span>
                 </Tooltip>
             )
         } else {
             //return the string
             text += string;
-            return <span>{string}</span>;
+            return <span key={`plaintext-${i}`}>{string}</span>;
         }
     })
 

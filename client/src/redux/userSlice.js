@@ -43,5 +43,5 @@ const userSlice = createSlice({
 
 export const { setUser } = userSlice.actions;
 export const selectUser = state => state.user.user;
-export const selectIsAuth = state => state.user.user !== null;
+export const selectIsAuth = state => state.user.user !== null || false;
 export default userSlice.reducer;

@@ -104,17 +104,7 @@ export const updateBusiness = createAsyncThunk(
     async (payload, thunkAPI) => {
         try {
             const response = await updateBusinessApi(payload.businessId, payload.updates);
-            const businesses = thunkAPI.getState().businesses.businesses.map(business => {
-                if (business.business_id === payload.businessId) {
-                    return {
-                        ...response.data.data, 
-                        audiences: payload.updates.audiences,
-                    };
-                } else {
-                    return business;
-                }
-            });
-            thunkAPI.dispatch(setBusinesses(businesses));
+            thunkAPI.dispatch(getBusinesses())
             return response.data;
         } catch (err) {
             return thunkAPI.rejectWithValue(err.response.data);

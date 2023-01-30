@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchFolders, deleteFolder, fetchFolderById, createFolder, updatePromptFolder } from "../api/folders";
+import { fetchFolders, deleteFolder, fetchFolderById, createFolder, updatePromptFolder, updateFolderNameApi } from "../api/folders";
 
 const foldersSlice = createSlice({
     name: "folders",
@@ -7,6 +7,8 @@ const foldersSlice = createSlice({
         folders: [],
         newFolderName: "",
         isNewFolderModalOpen: false,
+        updatedFolderName: "",
+        isFolderNameEditable: false,
     },
     reducers: {
         setFolders: (state, action) => {
@@ -17,6 +19,12 @@ const foldersSlice = createSlice({
         },
         setNewFolderName: (state, action) => {
             state.newFolderName = action.payload;
+        },
+        setUpdatedFolderName: (state, action) => {
+            state.updatedFolderName = action.payload;
+        },
+        toggleIsFolderNameEditable: (state) => {
+            state.isFolderNameEditable = !state.isFolderNameEditable;
         }
     },
 });
@@ -75,8 +83,23 @@ export const updatePromptFolderThunk = createAsyncThunk(
     }
 );
 
-export const { setFolders, setIsNewFolderModalOpen, setNewFolderName } = foldersSlice.actions;
+export const updateFolderNameThunk = createAsyncThunk(
+    "folders/updateFolderName",
+    async (payload, thunkAPI) => {
+        try {
+            const response = await updateFolderNameApi(payload.id, payload.folderName);
+            thunkAPI.dispatch(getFolders());
+            return response.data;
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err.response.data);
+        }
+    }
+);
+
+export const { setFolders, setIsNewFolderModalOpen, setNewFolderName, setUpdatedFolderName, toggleIsFolderNameEditable } = foldersSlice.actions;
 export const selectFolders = (state) => state.folders.folders;
 export const selectIsNewFolderModalOpen = (state) => state.folders.isNewFolderModalOpen;
 export const selectNewFolderName = (state) => state.folders.newFolderName;
+export const selectUpdatedFolderName = (state) => state.folders.updatedFolderName;
+export const selectIsFolderNameEditable = (state) => state.folders.isFolderNameEditable;
 export default foldersSlice.reducer;

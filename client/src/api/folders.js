@@ -21,3 +21,7 @@ export const deleteFolder = async (id) => {
 export const updatePromptFolder = async (id, folderId) => {
     return await axios.put(`${endpoint}/folders/location/${id}`, { folderId });
 }
+
+export const updateFolderNameApi = async (id, folderName) => {
+    return await axios.put(`${endpoint}/folders/${id}`, { folderName });
+}

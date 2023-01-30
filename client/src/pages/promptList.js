@@ -10,10 +10,10 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Avatar } from "@mui/material";
+import { Avatar, TextField } from "@mui/material";
 import Alert from '@mui/material/Alert';
 import FloatingAddButton from "../components/buttons/FloatingAddButton";
-import { deleteFolderThunk, getFolders, selectFolders } from "../redux/foldersSlice";
+import { deleteFolderThunk, getFolders, selectFolders, selectUpdatedFolderName, selectIsFolderNameEditable, updateFolderNameThunk, toggleIsFolderNameEditable, setUpdatedFolderName } from "../redux/foldersSlice";
 import { Button } from "@mui/material";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
@@ -33,6 +33,8 @@ function PromptList() {
     const promptList = prompts.filter(prompt => prompt.folder_id === Number(id));
     const folders = useSelector(selectFolders);
     const folder = folders.find(folder => folder.folder_id === Number(id));
+    const isFolderEditable = useSelector(selectIsFolderNameEditable)
+    const updatedFolderName = useSelector(selectUpdatedFolderName);
     const [moveModalOpen, setMoveModalOpen] = useState(false);
     const [newFolder, setNewFolder] = useState("");
     const [promptId, setPromptId] = useState("");
@@ -47,8 +49,13 @@ function PromptList() {
     }
 
     const handleDeleteFolder = () => {
-        dispatch(deleteFolderThunk({ id }));
-        navigate("/folders");
+        if(promptList.length == 0) {
+            dispatch(deleteFolderThunk({ id }));
+            navigate("/folders");
+        } else {
+            alert("Please delete all prompts in this folder before deleting the folder.")
+        }
+        
     }
 
     const handleFolderMove = (promptId) => {
@@ -62,13 +69,21 @@ function PromptList() {
         dispatch(fetchPromptsThunk());
     }
 
+    const handleFolderNameUpdateSubmit = () => {
+        dispatch(updateFolderNameThunk({ id, folderName: updatedFolderName }))
+        dispatch(toggleIsFolderNameEditable())
+    }
+
     return (
         <AppLayout>
             {(prompts && folder) && (<div className="px-16 py-10">
                 <div className="flex justify-between" style={{ alignItems: 'flex-start' }}>
                     <h1 className="text-2xl font-bold mb-8 align-top">{folder.name}</h1>
                     {folder.name !== "Drafts" &&
-                        <Button variant="contained" onClick={() => handleDeleteFolder()}>Delete Folder</Button>
+                        <div className="flex gap-x-4">
+                            <Button variant="outlined" onClick={() => dispatch(toggleIsFolderNameEditable())}>Edit Folder Name</Button>
+                            <Button variant="contained" onClick={() => handleDeleteFolder()}>Delete Folder</Button>
+                        </div>
                     }
                 </div>
                 <List sx={{ width: '100%', bgcolor: 'background.paper', maxHeight: "90%" }}>
@@ -136,12 +151,28 @@ function PromptList() {
                         >
                             {folders.map(folder => {
                                 return (
-                                    <MenuItem value={folder.folder_id}>{folder.name}</MenuItem>
+                                    <MenuItem value={folder.folder_id} key={folder.folder_id}>{folder.name}</MenuItem>
                                 )}
                             )}   
                         </Select>
                     </FormControl>
                     <Button variant="contained" onClick={handleFolderSubmit}>Move</Button>
+                </ModalWindow>
+                <ModalWindow
+                    handleOpen={() => dispatch(toggleIsFolderNameEditable())}
+                    handleClose={() => dispatch(toggleIsFolderNameEditable())}
+                    isOpen={isFolderEditable}
+                    header="Edit Folder Name"
+                >
+                    <TextField
+                        id="outlined-basic"
+                        label="Folder Name"
+                        variant="outlined"
+                        value={updatedFolderName}
+                        onChange={(e) => dispatch(setUpdatedFolderName(e.target.value))}
+                        sx={{ width: "100%", marginBottom: "10px" }}
+                    />
+                    <Button variant="contained" onClick={handleFolderNameUpdateSubmit}>Save</Button>
                 </ModalWindow>
             </div>)}
         </AppLayout>

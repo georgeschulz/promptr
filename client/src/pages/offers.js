@@ -68,6 +68,11 @@ function Offers() {
                         <Button variant="contained" onClick={() => handleUpdateOffer()}>Save</Button>
                     </div>
                 }
+                { !selectedOfferId &&
+                    <div className="ml-10 w-full float-left">
+                        <h1 className="text-2xl font-bold">Select an offer to edit</h1>
+                    </div>
+                }
 
                 <FloatingAddButton onClick={() => dispatch(createNewOffer())} />
             </div>

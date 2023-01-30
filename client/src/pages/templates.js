@@ -74,6 +74,11 @@ function Templates() {
                         <Button variant="contained" onClick={handleUpdateTemplate}>Update Template</Button>
                     </div>
                 )}
+                {!selectedTemplateId && (
+                    <div className="ml-10 w-full">
+                        <h1 className="text-2xl font-bold">Select a template to edit or + to create a new template</h1>
+                    </div>
+                )}
             </div>
             <FloatingAddButton onClick={() => dispatch(createTemplateThunk())} />
         </AppLayout>
