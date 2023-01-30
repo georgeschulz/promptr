@@ -7,8 +7,8 @@ module.exports = createPrompt = async (userId, folderId) => {
     console.log(draftsId)
 
     const query = `
-        INSERT INTO prompts (quality, folder_id)
-        VALUES (false, $1)
+        INSERT INTO prompts (quality, folder_id, prompt_name)
+        VALUES (false, $1, 'New Prompt')
         RETURNING *
     `
 

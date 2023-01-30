@@ -71,8 +71,9 @@ const deleteOfferController = async (req, res) => {
 const updateOfferController = async (req, res) => {
     try {
         const offerId = req.params.id;
-        const { painPoints, benefits, name, description, features } = req.body;
-        const offer = await updateOffer(offerId, painPoints, benefits, name, description, features);
+        console.log(req.body)
+        const { pain_points, benefits, name, description, features } = req.body;
+        const offer = await updateOffer(offerId, pain_points, benefits, name, description, features);
         res.status(200).json({
             data: offer,
             message: 'Offer updated successfully'

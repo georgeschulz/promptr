@@ -83,6 +83,7 @@ export const updateOffer = createAsyncThunk(
     "offer/updateOffer",
     async (data, thunkAPI) => {
         const response = await updateOfferApi(data.businessId, data.updates);
+        console.log(data.updates)
         thunkAPI.dispatch(getOffers());
         return response.data;
     }
