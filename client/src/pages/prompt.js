@@ -18,6 +18,8 @@ import Autocomplete from '@mui/material/Autocomplete';
 import FillTemplate from "../components/fileSystem/fillTemplate";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import EditIcon from '@mui/icons-material/Edit';
+import { selectIsUpdateSuccess, setIsUpdateSuccess } from "../redux/promptsSlice";
+import SuccessBox from "../components/layout/sucessBox";
 
 function Prompt() {
     const dispatch = useDispatch();
@@ -43,6 +45,7 @@ function Prompt() {
     const offerPainPoints = useSelector(selectOfferPainPoints)
     const offerBenefits = useSelector(selectOfferBenefits)
     const offerFeatures = useSelector(selectOfferFeatures)
+    const isUpdateSuccess = useSelector(selectIsUpdateSuccess)
     const audienceOptions = useSelector(selectAudienceOptions)
     let finalPrompt = { 
         context: context || "", 
@@ -116,6 +119,7 @@ function Prompt() {
 
     return (
         <AppLayout>
+            {isUpdateSuccess && <SuccessBox message="Prompt updated successfully" open={isUpdateSuccess} setOpen={setIsUpdateSuccess} />}
             <div className="px-16 py-10">
                 <div className="flex justify-between">
                     <div className="flex mb-8">

@@ -21,7 +21,8 @@ const promptSlice = createSlice({
         currentOfferFeatures: "",
         currentBusiness: "",
         currentBusinessId: "",
-        audienceOptions: []
+        audienceOptions: [],
+        isUpdatesuccess: false,
     },
     reducers: {
         setContext: (state, action) => {
@@ -80,17 +81,20 @@ const promptSlice = createSlice({
             state.currentBusinessDescription = action.payload;
         },
         setAudienceOptions: (state, action) => {
-            state.audienceOptions = action.payload.map(audience => { 
+            state.audienceOptions = action.payload.map(audience => {
                 return { title: audience.name }
-             });
+            });
         },
         setPromptName: (state, action) => {
             state.promptName = action.payload;
+        },
+        setIsUpdateSuccess: (state, action) => {
+            state.isUpdatesuccess = action.payload;
         }
     }
 });
 
-export const { setContext, setAudience, setAdditionalDetails, setQuality, setLength, setPrompt, setPrompts, clearPrompt, setCurrentBusiness, setCurrentBusinessId, setCurrentOfferBenefits, setCurrentOfferDescription, setCurrentOfferFeatures, setCurrentOfferId, setCurrentOfferPainPoints, setCurrentTemplateId, setBusinessDescription, setAudienceOptions, setPromptName } = promptSlice.actions;
+export const { setContext, setAudience, setAdditionalDetails, setQuality, setLength, setPrompt, setPrompts, clearPrompt, setCurrentBusiness, setCurrentBusinessId, setCurrentOfferBenefits, setCurrentOfferDescription, setCurrentOfferFeatures, setCurrentOfferId, setCurrentOfferPainPoints, setCurrentTemplateId, setBusinessDescription, setAudienceOptions, setPromptName, setIsUpdateSuccess } = promptSlice.actions;
 export const selectContext = (state) => state.prompts.context;
 export const selectAudience = (state) => state.prompts.audience;
 export const selectAdditionalDetails = (state) => state.prompts.additionalDetails;
@@ -109,6 +113,7 @@ export const selectCurrentBusinessId = (state) => state.prompts.currentBusinessI
 export const selectBusinessDescription = (state) => state.prompts.currentBusinessDescription;
 export const selectAudienceOptions = (state) => state.prompts.audienceOptions;
 export const selectPromptName = (state) => state.prompts.promptName;
+export const selectIsUpdateSuccess = (state) => state.prompts.isUpdatesuccess;
 
 export const fetchPromptsThunk = createAsyncThunk(
     'prompts/fetchPrompts',
@@ -159,28 +164,33 @@ export const duplicatePromptThunk = createAsyncThunk(
 export const updatePromptThunk = createAsyncThunk(
     'prompts/updatePrompt',
     async (data, thunkAPI) => {
-        const context = selectContext(thunkAPI.getState());
-        const audience = selectAudience(thunkAPI.getState());
-        const additionalDetails = selectAdditionalDetails(thunkAPI.getState());
-        const quality = selectQuality(thunkAPI.getState());
-        const length = selectLength(thunkAPI.getState());
-        const templateId = selectCurrentTemplateId(thunkAPI.getState());
-        const offerId = selectCurrentOfferId(thunkAPI.getState());
-        const businessId = selectCurrentBusinessId(thunkAPI.getState());
-        const promptName = selectPromptName(thunkAPI.getState());
-        const response = await updatePromptApi(data.id, {
-            context: context,
-            additionalDetails: additionalDetails,
-            quality: quality,
-            length: length,
-            prompt: data.text,
-            businessId,
-            offerId,
-            templateId,
-            audience,
-            promptName
-        });
-        return response.data;
+        try {
+            const context = selectContext(thunkAPI.getState());
+            const audience = selectAudience(thunkAPI.getState());
+            const additionalDetails = selectAdditionalDetails(thunkAPI.getState());
+            const quality = selectQuality(thunkAPI.getState());
+            const length = selectLength(thunkAPI.getState());
+            const templateId = selectCurrentTemplateId(thunkAPI.getState());
+            const offerId = selectCurrentOfferId(thunkAPI.getState());
+            const businessId = selectCurrentBusinessId(thunkAPI.getState());
+            const promptName = selectPromptName(thunkAPI.getState());
+            const response = await updatePromptApi(data.id, {
+                context: context,
+                additionalDetails: additionalDetails,
+                quality: quality,
+                length: length,
+                prompt: data.text,
+                businessId,
+                offerId,
+                templateId,
+                audience,
+                promptName
+            });
+            thunkAPI.dispatch(setIsUpdateSuccess(true));
+            return response.data;
+        } catch (error) {
+            thunkAPI.dispatch(setIsUpdateSuccess(false));
+        }
     }
 );
 
