@@ -12,6 +12,7 @@ const offerSlice = createSlice({
         newOfferFeatures: "",
         selectedOfferId: null,
         searchTerm: "",
+        isUpdateSuccess: false,
     },
     reducers: {
         setOffers: (state, action) => {
@@ -37,6 +38,9 @@ const offerSlice = createSlice({
         },
         setSelectedOfferId: (state, action) => {
             state.selectedOfferId = action.payload;
+        },
+        setIsUpdateSuccess: (state, action) => {
+            state.isUpdateSuccess = action.payload;
         }
     },
 });
@@ -85,11 +89,12 @@ export const updateOffer = createAsyncThunk(
         const response = await updateOfferApi(data.businessId, data.updates);
         console.log(data.updates)
         thunkAPI.dispatch(getOffers());
+        thunkAPI.dispatch(setIsUpdateSuccess(true));
         return response.data;
     }
 );
 
-export const { setOffers, setNewOfferName, setNewOfferDescription, setNewOfferPainpoints, setNewOfferBenefits, setNewOfferFeatures, setSearchTerm, setSelectedOfferId } = offerSlice.actions;
+export const { setOffers, setNewOfferName, setNewOfferDescription, setNewOfferPainpoints, setNewOfferBenefits, setNewOfferFeatures, setSearchTerm, setSelectedOfferId, setIsUpdateSuccess } = offerSlice.actions;
 export const selectOffers = state => state.offers.offers;
 export const selectNewOfferName = state => state.offers.newOfferName;
 export const selectNewOfferDescription = state => state.offers.newOfferDescription;
@@ -98,4 +103,5 @@ export const selectNewOfferBenefits = state => state.offers.newOfferBenefits;
 export const selectNewOfferFeatures = state => state.offers.newOfferFeatures;
 export const selectSearchTerm = state => state.offers.searchTerm;
 export const selectSelectedOfferId = state => state.offers.selectedOfferId;
+export const selectIsUpdateSuccess = state => state.offers.isUpdateSuccess;
 export default offerSlice.reducer;

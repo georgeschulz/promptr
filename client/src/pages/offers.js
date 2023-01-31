@@ -5,6 +5,8 @@ import { selectOffers, selectNewOfferBenefits, selectNewOfferDescription, select
 import SearchMenu from "../components/fileSystem/searchMenu";
 import FloatingAddButton from "../components/buttons/FloatingAddButton";
 import { Button, TextField } from "@mui/material";
+import { selectIsUpdateSuccess, setIsUpdateSuccess } from "../redux/offerSlice";
+import SuccessBox from "../components/layout/sucessBox";
 
 function Offers() {
     const dispatch = useDispatch();
@@ -16,6 +18,7 @@ function Offers() {
     const newOfferFeatures = useSelector(selectNewOfferFeatures);
     const searchTerm = useSelector(selectSearchTerm);
     const selectedOfferId = useSelector(selectSelectedOfferId);
+    const isUpdateSuccess = useSelector(selectIsUpdateSuccess);
 
     useEffect(() => {
         dispatch(getOffers());
@@ -47,6 +50,7 @@ function Offers() {
 
     return (
         <AppLayout>
+            { isUpdateSuccess && <SuccessBox message="Offer updated successfully" open={isUpdateSuccess} setOpen={setIsUpdateSuccess} /> }
             <div className="px-16 py-10 flex" style={{ alignItems: 'flex-start'}}>
                 <SearchMenu
                     data={offers}

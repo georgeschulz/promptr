@@ -6,6 +6,8 @@ import FloatingAddButton from "../components/buttons/FloatingAddButton";
 import { Button, TextField } from "@mui/material";
 import { selectTemplates, selectNewTemplateFormula, selectNewTemplateName, selectSelectedTemplateId, setNewTemplateFormula, setNewTemplateName, setSelectedTemplateId, setNewBusinessDescription, setTemplates, getTemplates, createTemplateThunk, deleteTemplateThunk, updateTemplate, selectSearchTerm, setSearchTerm, appendToFormula, selectCursorPosition, setCursorPosition, insertStringIntoFormulaAtIndex } from "../redux/templatesSlice";
 import MergeButton from "../components/buttons/MergeButton";
+import { setIsTemplateUpdateSuccess, selectIsTemplateUpdateSuccess } from "../redux/templatesSlice";
+import SuccessBox from "../components/layout/sucessBox";
 
 function Templates() {
     const dispatch = useDispatch();
@@ -14,6 +16,7 @@ function Templates() {
     const newTemplateFormula = useSelector(selectNewTemplateFormula);
     const selectedTemplateId = useSelector(selectSelectedTemplateId);
     const searchTerm = useSelector(selectSearchTerm);
+    const isTemplateSuccess = useSelector(selectIsTemplateUpdateSuccess);
 
     useEffect(() => {
         dispatch(getTemplates());
@@ -36,6 +39,7 @@ function Templates() {
 
     return (
         <AppLayout>
+            {isTemplateSuccess && <SuccessBox message="Template updated successfully" open={isTemplateSuccess} setOpen={setIsTemplateUpdateSuccess} />}
             <div className="px-16 py-10 flex" style={{ alignItems: 'flex-start' }}>
                 <SearchMenu
                     data={templates}

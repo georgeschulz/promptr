@@ -9,7 +9,9 @@ const businessesSlice = createSlice({
         newBusinessDescription: "",
         searchTerm: "",
         selectedBusinessId: null,
-        audiences: []
+        audiences: [],
+        isLoading: false,
+        isUpdateSuccess: false,
     },
     reducers: {
         setBusinesses: (state, action) => {
@@ -45,6 +47,9 @@ const businessesSlice = createSlice({
         removeAudienceMember: (state, action) => {
             const { index } = action.payload;
             state.audiences.splice(index, 1);
+        },
+        setIsUpdateSuccess: (state, action) => {
+            state.isUpdateSuccess = action.payload;
         }
     },
 });
@@ -105,6 +110,7 @@ export const updateBusiness = createAsyncThunk(
         try {
             const response = await updateBusinessApi(payload.businessId, payload.updates);
             thunkAPI.dispatch(getBusinesses())
+            thunkAPI.dispatch(setIsUpdateSuccess(true));
             return response.data;
         } catch (err) {
             return thunkAPI.rejectWithValue(err.response.data);
@@ -112,7 +118,7 @@ export const updateBusiness = createAsyncThunk(
     }
 );
 
-export const { setBusinesses, setNewBusinessName, setNewBusinessDescription, setSearchTerm, setSelectedBusinessId, setAudiences, addAudience, updateAudienceMember, removeAudienceMember } = businessesSlice.actions;
+export const { setBusinesses, setNewBusinessName, setNewBusinessDescription, setSearchTerm, setSelectedBusinessId, setAudiences, addAudience, updateAudienceMember, removeAudienceMember, setIsUpdateSuccess } = businessesSlice.actions;
 export const selectBusinesses = (state) => state.businesses.businesses;
 export const selectNewBusinessName = (state) => state.businesses.newBusinessName;
 export const selectNewBusinessDescription = (state) => state.businesses.newBusinessDescription;
@@ -120,4 +126,5 @@ export const selectSearchTerm = (state) => state.businesses.searchTerm;
 export const selectSelectedBusinessId = (state) => state.businesses.selectedBusinessId;
 export const selectSelectedBusiness = (state) => state.businesses.businesses ? state.businesses.businesses.find(business => business.business_id === state.businesses.selectedBusinessId) : null;
 export const selectAudiences = (state) => state.businesses.audiences;
+export const selectIsUpdateSuccess = (state) => state.businesses.isUpdateSuccess;
 export default businessesSlice.reducer;

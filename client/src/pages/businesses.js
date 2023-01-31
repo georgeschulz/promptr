@@ -1,12 +1,13 @@
 import AppLayout from "../components/layout/AppLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getBusinesses, selectBusinesses, setSearchTerm, selectSearchTerm, setSelectedBusinessId, selectSelectedBusiness, newBusiness, removeBusiness, setNewBusinessName, setNewBusinessDescription, selectNewBusinessName, selectNewBusinessDescription, updateBusiness, selectAudiences, updateAudienceMember, removeAudienceMember, addAudience, setAudiences } from "../redux/businessesSlice";
+import { getBusinesses, selectBusinesses, setSearchTerm, selectSearchTerm, setSelectedBusinessId, selectSelectedBusiness, newBusiness, removeBusiness, setNewBusinessName, setNewBusinessDescription, selectNewBusinessName, selectNewBusinessDescription, updateBusiness, selectAudiences, updateAudienceMember, removeAudienceMember, addAudience, setAudiences, selectIsUpdateSuccess, setIsUpdateSuccess } from "../redux/businessesSlice";
 import SearchMenu from "../components/fileSystem/searchMenu";
 import FloatingAddButton from "../components/buttons/FloatingAddButton";
 import { TextField, Button, IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import SuccessBox from "../components/layout/sucessBox";
 
 function Businesses() {
     const dispatch = useDispatch();
@@ -15,6 +16,7 @@ function Businesses() {
     const newBusinessName = useSelector(selectNewBusinessName)
     const newBusinessDescription = useSelector(selectNewBusinessDescription)
     const audiences = useSelector(selectAudiences)
+    const isUpdateSuccess = useSelector(selectIsUpdateSuccess)
 
     useEffect(() => {
         dispatch(getBusinesses());
@@ -39,6 +41,7 @@ function Businesses() {
 
     return (
         <AppLayout>
+            { isUpdateSuccess && <SuccessBox message="Business Updated Successfully" open={isUpdateSuccess} setOpen={setIsUpdateSuccess} /> }
             <div className="px-16 py-10 flex" style={{ alignItems: 'flex-start'}}>
                 <SearchMenu
                     data={businesses}
