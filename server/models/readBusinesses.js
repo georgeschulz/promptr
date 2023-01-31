@@ -16,7 +16,7 @@ module.exports = readBusinesses = async (userId) => {
         WHERE businesses.user_id = $1
     `
 
-        const businesses = await db.query(query, [2]);
+        const businesses = await db.query(query, [userId]);
         // create an object to hold the unique businesses
         const businessesWithAudiences = {};
         // loop through the businesses
