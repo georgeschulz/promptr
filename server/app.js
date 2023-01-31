@@ -2,7 +2,6 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const db = require('./models/db')
 const authRouter = require('./routes/auth');
 const foldersRouter = require('./routes/folders');
 const promptsRouter = require('./routes/prompts');
@@ -39,16 +38,12 @@ app.use(passport.session());
 
 require('./controllers/auth');
 
-app.get('/test', async (req, res) => {
-    res.status(200).send('test')
-});
-
-app.use('/auth', cors({ credentials: true, origin: 'http://localhost:3000' }), express.json(), authRouter);
-app.use('/folders', cors({ credentials: true, origin: 'http://localhost:3000' }), express.json(), foldersRouter);
-app.use('/prompts', cors({ credentials: true, origin: 'http://localhost:3000' }), express.json(), promptsRouter);
-app.use('/businesses', cors({ credentials: true, origin: 'http://localhost:3000' }), express.json(), businessesRouter);
-app.use('/offers', cors({ credentials: true, origin: 'http://localhost:3000' }), express.json(), offersRouter);
-app.use('/templates', cors({ credentials: true, origin: 'http://localhost:3000' }), express.json(), templatesRouter);
+app.use('/api/auth', cors({ credentials: true, origin: 'http://localhost:3000' }), express.json(), authRouter);
+app.use('/api/folders', cors({ credentials: true, origin: 'http://localhost:3000' }), express.json(), foldersRouter);
+app.use('/api/prompts', cors({ credentials: true, origin: 'http://localhost:3000' }), express.json(), promptsRouter);
+app.use('/api/businesses', cors({ credentials: true, origin: 'http://localhost:3000' }), express.json(), businessesRouter);
+app.use('/api/offers', cors({ credentials: true, origin: 'http://localhost:3000' }), express.json(), offersRouter);
+app.use('/api/templates', cors({ credentials: true, origin: 'http://localhost:3000' }), express.json(), templatesRouter);
 
 //general path for getting static pages
 app.get("/*", (req, res) => {
