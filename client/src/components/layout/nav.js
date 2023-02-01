@@ -15,6 +15,7 @@ function Nav() {
             <div>
                 <ul className="flex text-lg gap-4">
                     <NavItem><Link to="/folders">Folders</Link></NavItem>
+                    <NavItem><Link to="/synthesize">Synthesize Notes</Link></NavItem>
                     <NavItem><Link to="/offers">Offers</Link></NavItem>
                     <NavItem><Link to="/businesses">Businesses</Link></NavItem>
                     <NavItem><Link to="/templates">Templates</Link></NavItem>

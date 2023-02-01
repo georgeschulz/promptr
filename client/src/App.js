@@ -10,6 +10,7 @@ import Templates from './pages/templates';
 import PromptList from './pages/promptList';
 import Prompt from './pages/prompt';
 import Home from './pages/home';
+import SynthesizePage from './pages/synthesize';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/templates" element={<Templates />} />
             <Route path="/folders/:id" element={<PromptList />} />
             <Route path="/prompts/:id" element={<Prompt />} />
+            <Route path="/synthesize" element={<SynthesizePage />} />
           </Route>
         </Routes>
       </Router>

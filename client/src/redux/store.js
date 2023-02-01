@@ -6,6 +6,7 @@ import businessesSlice from './businessesSlice';
 import offerSlice from './offerSlice';
 import templatesSlice from './templatesSlice';
 import promptsSlice from './promptsSlice';
+import synthesizeSlice from './synthesizeSlice';
 
 export const store = configureStore({
     reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
         businesses: businessesSlice,
         offers: offerSlice,
         templates: templatesSlice,
-        prompts: promptsSlice
+        prompts: promptsSlice,
+        synthesize: synthesizeSlice
     }
 });
